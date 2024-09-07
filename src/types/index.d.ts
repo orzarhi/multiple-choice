@@ -7,7 +7,7 @@ type Address = {
 };
 
 type Preferences = {
-  theme: 'light' | 'dark';
+  theme: string;
   notifications: boolean;
 };
 
@@ -25,8 +25,8 @@ export type User = {
   isAdmin: boolean;
   isActive: boolean;
   preferences: Preferences;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 };
 
 export type FilterField = {

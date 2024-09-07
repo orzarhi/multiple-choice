@@ -1,6 +1,6 @@
 import { useMemo, useReducer, useState } from 'react';
 import { filterFields } from '../constants';
-import { FilterReducer } from '../types';
+import { FilterReducer, User } from '../types';
 import usersData from '../data/users.json';
 
 const initialFiltersReducer: Record<string, boolean> = filterFields.reduce(
@@ -14,10 +14,13 @@ export const Users = () => {
   const [searchInput, setSearchInput] = useState<string>('');
   const [filters, dispatch] = useReducer(filterReducer, initialFiltersReducer);
 
-  const data = useMemo(() => {
-    let results = usersData.filter((user) =>
+  const searchForUser = (users: User[], searchInput: string) =>
+    users.filter((user) =>
       user.firstName.toLowerCase().includes(searchInput.toLowerCase())
     );
+
+  const data = useMemo(() => {
+    let results = searchForUser(usersData, searchInput);
 
     results = filterFields
       .filter((field) => filters[field.id])
