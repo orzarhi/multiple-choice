@@ -1,6 +1,6 @@
-import { User } from '../types';
+import { FilterField, User } from '../types';
 
-export const filterFields = [
+export const filterFields: FilterField[] = [
   {
     id: 'filterActive',
     label: 'Active',

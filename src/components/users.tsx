@@ -1,26 +1,30 @@
-import { useMemo, useReducer } from 'react';
+import { useMemo, useReducer, useState } from 'react';
 import { filterFields } from '../constants';
-import { FilterReducer, User } from '../types';
+import { FilterReducer } from '../types';
 import usersData from '../data/users.json';
 
-const initialFiltersReducer = filterFields.reduce(
+const initialFiltersReducer: Record<string, boolean> = filterFields.reduce(
   (acc, curr) => ({ ...acc, [curr.id]: false }),
-  {} as Record<string, boolean>
+  {}
 );
-
 const filterReducer: FilterReducer = (state, action) => {
   return { ...state, [action.id]: !state[action.id] };
 };
 export const Users = () => {
+  const [searchInput, setSearchInput] = useState<string>('');
   const [filters, dispatch] = useReducer(filterReducer, initialFiltersReducer);
 
   const data = useMemo(() => {
-    const results = filterFields
-      .filter((field) => filters[field.id])
-      .reduce((acc, curr) => curr.apply(acc), usersData);
+    let results = usersData.filter((user) =>
+      user.firstName.toLowerCase().includes(searchInput.toLowerCase())
+    );
 
-    return results as unknown as User[];
-  }, [filters]);
+    results = filterFields
+      .filter((field) => filters[field.id])
+      .reduce((acc, curr) => curr.apply(acc), results);
+
+    return results;
+  }, [filters, searchInput]);
 
   return (
     <div>
@@ -37,6 +41,12 @@ export const Users = () => {
           </label>
         ))}
       </div>
+      <input
+        type="text"
+        placeholder="Search User..."
+        value={searchInput}
+        onChange={({ target }) => setSearchInput(target.value)}
+      />
       {data.length ? (
         <ol>
           {data.map((user) => (

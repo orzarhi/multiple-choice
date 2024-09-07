@@ -29,11 +29,19 @@ export type User = {
   updatedAt: Date;
 };
 
+export type FilterField = {
+  id: string;
+  label: string;
+  apply: (data: User[]) => User[];
+};
 
 type FilterState = Record<string, boolean>;
 
-interface FilterAction {
+type FilterAction = {
   id: string;
-}
+};
 
-type FilterReducer = (state: FilterState, action: FilterAction) => FilterState;
+export type FilterReducer = (
+  state: Record<string, boolean>,
+  action: FilterAction
+) => Record<string, boolean>;
